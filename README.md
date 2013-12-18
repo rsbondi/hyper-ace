@@ -6,7 +6,7 @@ Usage
 Create HTML
 -----------
 
-```
+```xml
 <div id="editor"></div>
 <div id="hyper">
     <input type="text" id="exp"/>
@@ -17,7 +17,7 @@ Create HTML
 
 Reference scripts
 -----------------
-```
+```xml
 <script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="http://richardbondi.net/hyper-ace/hyper-ace.js"></script>
 ```
