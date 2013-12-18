@@ -36,7 +36,7 @@ var hyperace = {
 
     search: function () {
         console.log('hypersearch activated for expression: '+this.textbox.value);
-        var re = new RegExp(this.textbox.value);
+        var re = new RegExp(this.textbox.value,'g');
         var editor = this.editors[this.activeEditor];
         var found = editor.findAll(re);
         this.ranges = editor.getSelection().getAllRanges();
