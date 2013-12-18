@@ -7,19 +7,19 @@ Create HTML
 -----------
 
 ```
-&lt;div id="editor"&gt;&lt;/div&gt;
-&lt;div id="hyper"&gt;
-    &lt;input type="text" id="exp"/&gt;
-    &lt;button id="search"&gt;Search&lt;/button&gt;
-    &lt;div id="results"&gt;results&lt;/div&gt;
-&lt;/div&gt;
+<div id="editor"></div>
+<div id="hyper">
+    <input type="text" id="exp"/>
+    <button id="search">Search</button>
+    <div id="results">results</div>
+</div>
 ```
 
 Reference scripts
 -----------------
 ```
-&lt;script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"&gt;&lt;/script&gt;
-&lt;script src="hyper-ace.js"&gt;&lt;/script&gt;
+<script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="http://richardbondi.net/hyper-ace/hyper-ace.js"></script>
 ```
 
 Initialize ace editor
