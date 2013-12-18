@@ -1,12 +1,3 @@
-// TODO: apply deltas to links
-// TODO: implement multiple editors, (add/remove)Editor methods
-// TODO: add as a checkbox to ace's built in search
-// TODO: option for regex or text search
-// TODO: case insensitive
-// TODO: highlight matches in results
-// TODO: highlight clicked line in results
-// TODO: combine multiple occurrences in on line
-
 // plunk: http://plnkr.co/edit/TdxBKMzCRWuw9pmMqwab?p=preview
 
 var hyperace = {
