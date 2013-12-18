@@ -1,6 +1,10 @@
 // TODO: apply deltas to links
 // TODO: implement multiple editors, (add/remove)Editor methods
 // TODO: add as a checkbox to ace's built in search
+// TODO: option for regex or text search
+// TODO: case insensitive
+
+// plunk: http://plnkr.co/edit/TdxBKMzCRWuw9pmMqwab?p=preview
 
 var hyperace = {
     editors:      Array(),
