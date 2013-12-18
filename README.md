@@ -18,6 +18,7 @@ Create HTML
 Reference scripts
 -----------------
 ```xml
+<!-- use these or local copy -->
 <script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="http://richardbondi.net/hyper-ace/hyper-ace.js"></script>
 ```
