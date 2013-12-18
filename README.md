@@ -1,4 +1,4 @@
-A hypersearch component for ace editor.  This project is in the early stages.  You can experiment with the plunk [here](http://plnkr.co/edit/TdxBKMzCRWuw9pmMqwab?p=preview).  See todos in the hyper-ace.js file in the plunk or repository.
+A hypersearch component for ace editor.  This project is in the early stages.  You can experiment with the plunk [here](http://plnkr.co/edit/TdxBKMzCRWuw9pmMqwab?p=preview).  See issues section for list of enhancements.
 
 Usage
 =====
