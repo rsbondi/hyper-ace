@@ -18,24 +18,23 @@
 <script>
     // create ace editor
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
+    editor.setTheme("ace/theme/eclipse");
     editor.getSession().setMode("ace/mode/javascript");
 
     ace.config.loadModule("ace/ext/searchbox", function(e) {
-                e.Search(editor)
-                var boxes = document.getElementsByClassName('ace_search_field');
-                var box = boxes[0];
-                box.id = 'hyperbox';
-                box.addEventListener('keyup', function (e) {
-                    if (e.keyCode == 9)
-                        hyperace.search();
-                });
+        e.Search(editor)
+        var boxes = document.getElementsByClassName('ace_search_field');
+        var box = boxes[0];
+        box.id = 'hyperbox';
+        box.addEventListener('keyup', function (e) {
+            if (e.keyCode == 9)
+                hyperace.search();
+        });
 
-                // create hyperace and listener
-                hyperace.create(Array(editor), 'results', 'hyperbox');
+        // create hyperace and listener
+        hyperace.create(Array(editor), 'results', 'hyperbox');
 
-            }
-    );
+    });
 
 </script>
 </body>
