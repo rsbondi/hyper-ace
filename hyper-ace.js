@@ -64,6 +64,12 @@ var hyperace = {
             });
             this.target.appendChild(link);
         }
+        if(this.ranges.length>0){
+            // hack for no scroll when first item selected, select it by default
+            editor.moveCursorTo(this.ranges[0].start.row, this.ranges[0].start.column);
+            editor.find(re);
+            this.target.getElementsByTagName('a')[0].className = this.options['lineclass'];
+        }
     },
 
     /**
@@ -78,10 +84,10 @@ var hyperace = {
         var aceRange = ace.require('ace/range').Range;
 
         editor.focus();
-        editor.selection.setRange(new aceRange(r1, c1, r2, c2));
         editor.moveCursorTo(r2, c2);
+        editor.selection.setRange(new aceRange(r1, c1, r2, c2));
 
-        var links = this.target.getElementsByTagName('a');
+        var links = this.target.getElementsByTagName('a'); // clear result line highlight and set for selected result
         for(l in links) {
             links[l].className = '';
         }
