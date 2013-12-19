@@ -17,3 +17,11 @@
       text-decoration: none;
       color: gray;
     }
+
+    .hyperace-match{
+        background: rgba(255, 255,54,  .5);
+    }
+
+    .hyperace-line {
+        background: rgba(200, 200, 255, .5);
+    }

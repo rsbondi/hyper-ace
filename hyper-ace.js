@@ -6,6 +6,8 @@ var hyperace = {
     textbox:      null,
     activeEditor: 0,
     ranges:       null,
+    options:      null,
+    selected:     0,
 
 
     /**
@@ -13,24 +15,28 @@ var hyperace = {
      * @param editors Array<Editor>    can apply to multiple editors
      * @param target  string           where to display the results
      * @param textbox string           the search pattern element
-     * @param trigger string           click this to trigger search
+     * @param options string           additional configuration
      */
-    create: function(editors, target, textbox, trigger) {
+    create: function(editors, target, textbox, options) {
         for(e in editors) {
             this.editors.push(editors[e]);
         }
         this.target = document.getElementById(target);
         this.textbox = document.getElementById(textbox);
         var self = this;
-        if(trigger)
-            document.getElementById(trigger).addEventListener('click', function() {
-                self.search();
-            });
+        this.options = options ? options : Array();
+        if(options) {
+            this.options['matchclass'] = options['matchclass'] ? options['matchclass'] : 'hyperace-match';
+            this.options['lineclass'] = options['lineclass'] ? options['lineclass'] : 'hyperace-line';
+        } else {
+            this.options['matchclass'] = 'hyperace-match';
+            this.options['lineclass'] = 'hyperace-line';
+        }
     },
 
     search: function () {
         console.log('hypersearch activated for expression: '+this.textbox.value);
-        var re = new RegExp(this.textbox.value,'g');
+        var re = new RegExp('('+this.textbox.value+')','g');
         var editor = this.editors[this.activeEditor];
         var found = editor.findAll(re);
         this.ranges = editor.getSelection().getAllRanges();
@@ -45,10 +51,16 @@ var hyperace = {
             var link = document.createElement('a');
             link.href = '#';
             link.setAttribute('link-index', r);
-            link.innerHTML += (line + 1) + ': ' + this.htmlEncode(editor.getSession().getLine(line)) + '<br/>';
+            var rawline = editor.getSession().getLine(line);
+            var pre = rawline.substr(0,self.ranges[r].start.column );
+            var match = rawline.substr(self.ranges[r].start.column, self.ranges[r].end.column - self.ranges[r].start.column);
+            var post = rawline.substr(self.ranges[r].end.column );
+            console.log('line: '+rawline+'\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
+            var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+match+'</span>' + this.htmlEncode(post)+ '<br/>';
+            link.innerHTML += (line + 1) + ': ' + resultline;
             link.addEventListener('click', function () {
                 var r = this.getAttribute('link-index');
-                self.gorange( self.ranges[r].start.row, self.ranges[r].start.column, self.ranges[r].end.row,self.ranges[r].end.column )
+                self.gorange( self.ranges[r].start.row, self.ranges[r].start.column, self.ranges[r].end.row,self.ranges[r].end.column, this )
             });
             this.target.appendChild(link);
         }
@@ -61,13 +73,19 @@ var hyperace = {
      * @param r2 Number range.end.row
      * @param c2 Number range.end.column
      */
-    gorange: function(r1, c1, r2, c2) {
+    gorange: function(r1, c1, r2, c2, link) {
         var editor = this.editors[this.activeEditor];
         var aceRange = ace.require('ace/range').Range;
 
+        editor.focus();
         editor.selection.setRange(new aceRange(r1, c1, r2, c2));
         editor.moveCursorTo(r2, c2);
-        editor.focus();
+
+        var links = this.target.getElementsByTagName('a');
+        for(l in links) {
+            links[l].className = '';
+        }
+        link.className = this.options['lineclass'];
     },
 
     // TODO: a better way?
