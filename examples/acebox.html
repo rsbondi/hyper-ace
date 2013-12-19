@@ -1,3 +1,4 @@
+<!-- plunk: http://plnkr.co/edit/1BAWgE0wtKZmWlFKRcQg?p=preview -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +10,7 @@
 
 <div id="editor"></div>
 <div id="hyper">
-    <h3>In this example, the ace editor search box functions as normal, the hypersearch is activated by the [tab] key</h3>
+    <h3>Hypersearch with [tab] key in search box</h3>
     <div id="results">results</div>
 </div>
 
@@ -21,18 +22,17 @@
     editor.setTheme("ace/theme/eclipse");
     editor.getSession().setMode("ace/mode/javascript");
 
+    // undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
     ace.config.loadModule("ace/ext/searchbox", function(e) {
-        e.Search(editor)
-        var boxes = document.getElementsByClassName('ace_search_field');
-        var box = boxes[0];
-        box.id = 'hyperbox';
-        box.addEventListener('keyup', function (e) {
+        e.Search(editor); // set to editor component
+        var box = document.getElementById('editor').getElementsByClassName('ace_search_field')[0]; // get texbox element
+        box.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
+        box.addEventListener('keyup', function (e) { // look for tab key in search box
             if (e.keyCode == 9)
                 hyperace.search();
         });
 
-        // create hyperace and listener
-        hyperace.create(Array(editor), 'results', 'hyperbox');
+        hyperace.create(Array(editor), 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
 
     });
 
