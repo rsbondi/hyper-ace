@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../style.css"/>
+    <meta charset="utf-8">
+</head>
+
+<body>
+
+<div id="editor"></div>
+<div id="hyper">
+    <h3>In this example, the ace editor search box functions as normal, the hypersearch is activated by the [tab] key</h3>
+    <div id="results">results</div>
+</div>
+
+<script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="../hyper-ace.js"></script>
+<script>
+    // create ace editor
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+
+    ace.config.loadModule("ace/ext/searchbox", function(e) {
+                e.Search(editor)
+                var boxes = document.getElementsByClassName('ace_search_field');
+                var box = boxes[0];
+                box.id = 'hyperbox';
+                box.addEventListener('keyup', function (e) {
+                    if (e.keyCode == 9)
+                        hyperace.search();
+                });
+
+                // create hyperace and listener
+                hyperace.create(Array(editor), 'results', 'hyperbox');
+
+            }
+    );
+
+</script>
+</body>
+
+</html>
