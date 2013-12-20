@@ -64,6 +64,7 @@ var hyperace = {
         if(this.ranges[index].start.row == this.ranges[index].end.row && this.ranges[index].start.column == this.ranges[index].end.column)
             return; // empty result
         var line = this.ranges[index].start.row;
+        var col = this.ranges[index].start.column;
         console.log('found row index ' + index + ' @ line: ' + line);
         var container = document.createElement('div');
         var link = document.createElement('a');
@@ -76,7 +77,7 @@ var hyperace = {
         var post = rawline.substr(this.ranges[index].end.column );
         console.log('line: '+rawline+'\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
         var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+this.htmlEncode(match)+'</span>' + this.htmlEncode(post);
-        link.innerHTML += (line + 1) + ': ' + resultline+ '<br/>';
+        link.innerHTML += '('+(line + 1)+',' + (col+1) + ') ' + resultline+ '<br/>';
         var self = this;
         link.addEventListener('click', function () {
             var index = this.getAttribute('link-index');
