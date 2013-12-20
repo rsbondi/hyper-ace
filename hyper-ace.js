@@ -61,7 +61,7 @@ var hyperace = {
             var match = rawline.substr(self.ranges[r].start.column, self.ranges[r].end.column - self.ranges[r].start.column);
             var post = rawline.substr(self.ranges[r].end.column );
             console.log('line: '+rawline+'\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
-            var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+match+'</span>' + this.htmlEncode(post)+ '<br/>';
+            var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+this.htmlEncode(match)+'</span>' + this.htmlEncode(post)+ '<br/>';
             link.innerHTML += (line + 1) + ': ' + resultline;
             link.addEventListener('click', function () {
                 var r = this.getAttribute('link-index');
