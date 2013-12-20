@@ -49,34 +49,40 @@ var hyperace = {
         console.log(JSON.stringify(this.ranges));
         editor.exitMultiSelectMode();
         this.target.innerHTML = '';
-        var self = this;
         for (r = 0; r < this.ranges.length; r++) {
-            if(self.ranges[r].start.row == self.ranges[r].end.row && self.ranges[r].start.column == self.ranges[r].end.column)
-                continue; // empty result
-            var line = this.ranges[r].start.row;
-            console.log('found row index ' + r + ' @ line: ' + line);
-            var link = document.createElement('a');
-            link.href = '#';
-            link.setAttribute('link-index', r);
-            var rawline = editor.getSession().getLine(line);
-            var pre = rawline.substr(0,self.ranges[r].start.column );
-            var match = rawline.substr(self.ranges[r].start.column, self.ranges[r].end.column - self.ranges[r].start.column);
-            var post = rawline.substr(self.ranges[r].end.column );
-            console.log('line: '+rawline+'\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
-            var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+this.htmlEncode(match)+'</span>' + this.htmlEncode(post)+ '<br/>';
-            link.innerHTML += (line + 1) + ': ' + resultline;
-            link.addEventListener('click', function () {
-                var r = this.getAttribute('link-index');
-                self.gorange( self.ranges[r].start.row, self.ranges[r].start.column, self.ranges[r].end.row,self.ranges[r].end.column, this )
-            });
-            this.target.appendChild(link);
+            this._addResult(r) ;
         }
         if(this.ranges.length>0){
             // hack for no scroll when first item selected, select it by default
             editor.moveCursorTo(this.ranges[0].start.row, this.ranges[0].start.column);
             editor.find(this.textbox.value);
-            this.target.getElementsByTagName('a')[0].className = this.options['lineclass'];
+            this.target.getElementsByTagName('div')[0].className = this.options['lineclass'];
         }
+    },
+    
+    _addResult: function(index) {
+        if(this.ranges[index].start.row == this.ranges[index].end.row && this.ranges[index].start.column == this.ranges[index].end.column)
+            return; // empty result
+        var line = this.ranges[index].start.row;
+        console.log('found row index ' + index + ' @ line: ' + line);
+        var container = document.createElement('div');
+        var link = document.createElement('a');
+        container.appendChild(link);
+        link.href = '#';
+        link.setAttribute('link-index', index);
+        var rawline = editor.getSession().getLine(line);
+        var pre = rawline.substr(0,this.ranges[index].start.column );
+        var match = rawline.substr(this.ranges[index].start.column, this.ranges[index].end.column - this.ranges[index].start.column);
+        var post = rawline.substr(this.ranges[index].end.column );
+        console.log('line: '+rawline+'\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
+        var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+this.htmlEncode(match)+'</span>' + this.htmlEncode(post);
+        link.innerHTML += (line + 1) + ': ' + resultline+ '<br/>';
+        var self = this;
+        link.addEventListener('click', function () {
+            var index = this.getAttribute('link-index');
+            self._linkSelected( self.ranges[index].start.row, self.ranges[index].start.column, self.ranges[index].end.row,self.ranges[index].end.column, this.parentNode )
+        });
+        this.target.appendChild(container);
     },
 
     /**
@@ -86,7 +92,7 @@ var hyperace = {
      * @param r2 Number range.end.row
      * @param c2 Number range.end.column
      */
-    gorange: function(r1, c1, r2, c2, link) {
+    _linkSelected: function(r1, c1, r2, c2, link) {
         var editor = this.editors[this.activeEditor];
         var aceRange = ace.require('ace/range').Range;
 
@@ -94,7 +100,7 @@ var hyperace = {
         editor.moveCursorTo(r2, c2);
         editor.selection.setRange(new aceRange(r1, c1, r2, c2));
 
-        var links = this.target.getElementsByTagName('a'); // clear result line highlight and set for selected result
+        var links = this.target.getElementsByTagName('div'); // clear result line highlight and set for selected result
         for(l in links) {
             links[l].className = '';
         }
