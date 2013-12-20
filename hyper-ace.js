@@ -44,13 +44,15 @@ var hyperace = {
         console.log('hypersearch activated for expression: '+this.textbox.value);
         var editor = this.editors[this.activeEditor];
         var found = editor.findAll(this.textbox.value);
+        editor.clearSelection();
         this.ranges = editor.getSelection().getAllRanges();
         console.log(JSON.stringify(this.ranges));
         editor.exitMultiSelectMode();
-        editor.clearSelection();
         this.target.innerHTML = '';
         var self = this;
         for (r = 0; r < this.ranges.length; r++) {
+            if(self.ranges[r].start.row == self.ranges[r].end.row && self.ranges[r].start.column == self.ranges[r].end.column)
+                continue; // empty result
             var line = this.ranges[r].start.row;
             console.log('found row index ' + r + ' @ line: ' + line);
             var link = document.createElement('a');
