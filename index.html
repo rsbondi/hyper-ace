@@ -11,7 +11,10 @@
 <div id="hyper">
     <input type="text" id="exp"/>
     <button id="search">Search</button>
-    <div id="results">results</div>
+    <label for="regex">regular expression</label><input id="regex" type="checkbox"/>&nbsp;
+    <label for="case">match case</label><input id="case" type="checkbox"/>&nbsp;
+    <label for="whole">whole word</label><input id="whole" type="checkbox"/>
+    <div id="results"></div>
 </div>
 
 <script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -33,6 +36,18 @@
     document.getElementById('exp').addEventListener('keyup', function (e) {
         if (e.keyCode == 13)
             hyperace.search();
+    });
+
+    document.getElementById("regex").addEventListener('click', function () {
+        hyperace.set({"regExp": this.checked});
+    });
+
+    document.getElementById("case").addEventListener('click', function () {
+        hyperace.set({"caseSensitive": this.checked});
+    });
+
+    document.getElementById("whole").addEventListener('click', function () {
+        hyperace.set({"wholeWord": this.checked});
     });
 
 </script>

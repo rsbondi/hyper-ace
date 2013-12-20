@@ -34,11 +34,16 @@ var hyperace = {
         }
     },
 
+    set: function(options) {
+        var editor = this.editors[this.activeEditor];
+        editor.$search.set(options);
+    },
+
+    // options.regExp, options.wholeWord, options.caseSensitive
     search: function () {
         console.log('hypersearch activated for expression: '+this.textbox.value);
-        var re = new RegExp('('+this.textbox.value+')','g');
         var editor = this.editors[this.activeEditor];
-        var found = editor.findAll(re);
+        var found = editor.findAll(this.textbox.value);
         this.ranges = editor.getSelection().getAllRanges();
         console.log(JSON.stringify(this.ranges));
         editor.exitMultiSelectMode();
@@ -67,7 +72,7 @@ var hyperace = {
         if(this.ranges.length>0){
             // hack for no scroll when first item selected, select it by default
             editor.moveCursorTo(this.ranges[0].start.row, this.ranges[0].start.column);
-            editor.find(re);
+            editor.find(this.textbox.value);
             this.target.getElementsByTagName('a')[0].className = this.options['lineclass'];
         }
     },
