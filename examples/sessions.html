@@ -7,14 +7,26 @@
 </head>
 
 <body>
-
+<style type="text/css">
+    .hyperace-session {
+        font-size: 1.5em;
+        margin: 5px 0;
+        background: #efefef;
+        padding: 2px;
+        text-align: center;
+        border: 1px solid;    }
+    #results {
+        height: 400px;
+        overflow: auto;
+    }
+</style>
 <div id="editor"></div>
 <div id="hyper">
     <label for="acemode">Session:</label>
     <select name="acemode" id="acemode">
-        <option value="javascript">javascript</option>
-        <option value="xml">html/xml</option>
-        <option value="css">css</option>
+        <option value="hyper-ace.js">javascript</option>
+        <option value="sessions.html">html/xml</option>
+        <option value="style.css">css</option>
     </select>
     <h3>Hypersearch with [tab] key in search box</h3>
     <div id="results"></div>
@@ -54,7 +66,7 @@
     $(function(){
         var sessioncount = 0; // track for all 3 sessions loaded
         $.get('../hyper-ace.js', function(data) {
-            sessions['javascript'] = editor.getSession();
+            sessions['hyper-ace.js'] = editor.getSession();
             editor.getSession().setValue(data);
             sessioncount++;
             if(sessioncount==3) hyperace.setSessions(sessions);
@@ -62,13 +74,13 @@
         });
         $.get('sessions.html', function(data) {
             var session = new ace.EditSession(data, {"path": "ace/mode/xml"});
-            sessions['xml'] = session;
+            sessions['sessions.html'] = session;
             sessioncount++;
             if(sessioncount==3) hyperace.setSessions(sessions);
         });
         $.get('../style.css', function(data) {
             var session = new ace.EditSession(data, {"path": "ace/mode/css"});
-            sessions['css'] = session;
+            sessions['style.css'] = session;
             sessioncount++;
             if(sessioncount) hyperace.setSessions(sessions);
         });

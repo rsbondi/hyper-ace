@@ -8,8 +8,6 @@ var hyperace = {
     activeEditor: 0,
     ranges:       null,
     options:      null,
-    selected:     0,
-    _search:     null,
 
 
     /**
@@ -55,63 +53,71 @@ var hyperace = {
 
     searchSessions: function () {
         this.target.innerHTML = '';
+        this.ranges = [];
         var editor = this.editors[this.activeEditor];
         var hold = editor.getSession();
         for(s in this.sessions) {
-            this._search(this.sessions[s]);
+            var session = document.createElement('div');
+            session.innerHTML = s;
+            session.className = 'hyperace-session';
+            this.target.appendChild(session);
+            this._search(this.sessions[s],s);
         }
         editor.setSession(hold);
     },
 
     search: function () {
+        this.target.innerHTML = '';
+        this.ranges = [];
         this._search();
     },
 
     /**
      * search the current session
      */
-    _search: function (session) {
+    _search: function (session, s) {
         console.log('hypersearch activated for expression: '+this.textbox.value);
         var editor = this.editors[this.activeEditor];
         if(session) editor.setSession(session);
         var found = editor.findAll(this.textbox.value);
         editor.clearSelection();
-        this.ranges = editor.getSelection().getAllRanges();
-        console.log(JSON.stringify(this.ranges));
+        this.ranges[s] = editor.getSelection().getAllRanges();
+        console.log(JSON.stringify(this.ranges[s]));
         editor.exitMultiSelectMode();
-        for (r = 0; r < this.ranges.length; r++) {
-            this._addResult(r) ;
+        for (r = 0; r < this.ranges[s].length; r++) {
+            this._addResult(r,s) ;
         }
-        if(this.ranges.length>0){
+        if(this.ranges[s].length>0){
             // hack for no scroll when first item selected, select it by default
-            editor.moveCursorTo(this.ranges[0].start.row, this.ranges[0].start.column);
+            editor.moveCursorTo(this.ranges[s][0].start.row, this.ranges[s][0].start.column);
             editor.find(this.textbox.value);
-            this.target.getElementsByTagName('div')[0].className = this.options['lineclass'];
+            this.target.getElementsByTagName('div')[s ? 1:0].className = this.options['lineclass'];
         }
     },
     
-    _addResult: function(index) {
-        if(this.ranges[index].start.row == this.ranges[index].end.row && this.ranges[index].start.column == this.ranges[index].end.column)
+    _addResult: function(index, sessionName) {
+        if(this.ranges[sessionName][index].start.row == this.ranges[sessionName][index].end.row && this.ranges[sessionName][index].start.column == this.ranges[sessionName][index].end.column)
             return; // empty result
-        var line = this.ranges[index].start.row;
-        var col = this.ranges[index].start.column;
+        var line = this.ranges[sessionName][index].start.row;
+        var col = this.ranges[sessionName][index].start.column;
         console.log('found row index ' + index + ' @ line: ' + line);
         var container = document.createElement('div');
         var link = document.createElement('a');
         container.appendChild(link);
         link.href = '#';
         link.setAttribute('link-index', index);
+        container.setAttribute('link-session', sessionName ? sessionName : '');
         var rawline = editor.getSession().getLine(line);
-        var pre = rawline.substr(0,this.ranges[index].start.column );
-        var match = rawline.substr(this.ranges[index].start.column, this.ranges[index].end.column - this.ranges[index].start.column);
-        var post = rawline.substr(this.ranges[index].end.column );
+        var pre = rawline.substr(0,this.ranges[sessionName][index].start.column );
+        var match = rawline.substr(this.ranges[sessionName][index].start.column, this.ranges[sessionName][index].end.column - this.ranges[sessionName][index].start.column);
+        var post = rawline.substr(this.ranges[sessionName][index].end.column );
         console.log('line: '+rawline+'\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
         var resultline = this.htmlEncode(pre) + '<span class="'+this.options.matchclass+'">'+this.htmlEncode(match)+'</span>' + this.htmlEncode(post);
         link.innerHTML += '('+(line + 1)+',' + (col+1) + ') ' + resultline+ '<br/>';
         var self = this;
         link.addEventListener('click', function () {
             var index = this.getAttribute('link-index');
-            self._linkSelected( self.ranges[index].start.row, self.ranges[index].start.column, self.ranges[index].end.row,self.ranges[index].end.column, this.parentNode )
+            self._linkSelected( self.ranges[sessionName][index].start.row, self.ranges[sessionName][index].start.column, self.ranges[sessionName][index].end.row,self.ranges[sessionName][index].end.column, this.parentNode )
         });
         this.target.appendChild(container);
     },
@@ -128,16 +134,18 @@ var hyperace = {
      * @param c2 Number range.end.column
      */
     _linkSelected: function(r1, c1, r2, c2, link) {
+        console.log("linke selected: " + link.getAttribute('link-session'));
         var editor = this.editors[this.activeEditor];
         var aceRange = ace.require('ace/range').Range;
 
+        if(link.getAttribute('link-session') !='') editor.setSession(this.sessions[link.getAttribute('link-session')]);
         editor.focus();
         editor.moveCursorTo(r2, c2);
         editor.selection.setRange(new aceRange(r1, c1, r2, c2));
 
         var links = this.target.getElementsByTagName('div'); // clear result line highlight and set for selected result
         for(l in links) {
-            links[l].className = '';
+            if(this.options['lineclass']== links[l].className)links[l].className = '';
         }
         link.className = this.options['lineclass'];
     },
