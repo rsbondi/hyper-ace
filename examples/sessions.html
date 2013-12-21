@@ -22,33 +22,31 @@
         overflow: auto;
         border: 1px solid gray;
     }
+    body, select {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size:12px;
+        color: gray;
+    }
 </style>
 <div id="editor"></div>
 <div id="hyper">
-    <label for="acemode">Session:</label>
+    <label for="acemode">File:</label>
     <select name="acemode" id="acemode">
-        <option value="hyper-ace.js">javascript</option>
-        <option value="sessions.html">html/xml</option>
-        <option value="style.css">css</option>
+        <option value="hyper-ace.js">hyper-ace.js</option>
+        <option value="sessions.html">sessions.html</option>
+        <option value="style.css">style.css</option>
     </select>
-    <h3>Hypersearch with [tab] key in search box</h3>
+    <p>This example shows the use of a search across multiple edit sessions.  Hit the [tab] key in the search box and the search
+        will be performed accross all 3 files.  Otherwise, the search box functions as the ace default.
+        Changing files with the selector will trigger a search on the selected file.
+        Selecting a result will jump to the selection in the editor for appropriate file.  The source code for this example
+        are the files loaded into the editor.</p>
     <div id="results"></div>
 </div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="../hyper-ace.js"></script>
 <script>
-    function createhyper(box) {
-        hyperace.create(Array(editor), 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
-        hyperace.set({
-            "regExp": true
-        });
-        hyperace.setSessions(sessions);
-        box.addEventListener('keyup', function (e) { // look for tab key in search box
-            if (e.keyCode == 9)
-                hyperace.searchSessions();
-        });
-    }
     // create ace editor
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/eclipse");
@@ -57,15 +55,23 @@
         $('#acemode').val(e.session.tag);
     });
     var sessions = [];
+    function createhyper(box) {
+        hyperace.create(Array(editor), 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
+        hyperace.setSessions(sessions);
+        box.addEventListener('keyup', function (e) { // look for tab key in search box
+            if (e.keyCode == 9)
+                hyperace.searchSessions();
+        });
+    }
 
     // undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
     ace.config.loadModule("ace/ext/searchbox", function(e) {
         e.Search(editor); // set to editor component
         var box = document.getElementById('editor').getElementsByClassName('ace_search_field')[0]; // get texbox element
         box.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
-        box.value = "\\b.+?:" // example that works in all 3 modes
+        box.value = "result" // example that works in all 3 modes
 
-        $($('.ace_search_options').find('.ace_button')[0]).addClass('checked');
+        //$($('.ace_search_options').find('.ace_button')[0]).addClass('checked');
 
         var sessioncount = 0; // track for all 3 sessions loaded
         $.get('../hyper-ace.js', function(data) {

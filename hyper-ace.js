@@ -57,11 +57,19 @@ var hyperace = {
         var editor = this.editors[this.activeEditor];
         var hold = editor.getSession();
         for(s in this.sessions) {
+            // TODO: check before creating header and skip if zero mathces.  Maybe return matches from _search and append here instead?
             var session = document.createElement('div');
             session.innerHTML = s;
             session.className = 'hyperace-session';
             this.target.appendChild(session);
+            var rangecheck = editor.getSelection().getAllRanges();
             this._search(this.sessions[s],s);
+            console.log('session: ' + s + ': '+ this.ranges[s].length + ' matches.')
+            if(this.ranges[s].length==0) {
+                var nogo = document.createElement('div');
+                nogo.innerHTML = 'no matches found';
+                this.target.appendChild(nogo);
+            }
         }
         editor.setSession(hold);
     },
@@ -91,13 +99,15 @@ var hyperace = {
             // hack for no scroll when first item selected, select it by default
             editor.moveCursorTo(this.ranges[s][0].start.row, this.ranges[s][0].start.column);
             editor.find(this.textbox.value);
-            this.target.getElementsByTagName('div')[s ? 1:0].className = this.options['lineclass'];
+            //this.target.getElementsByTagName('div')[s ? 1:0].className = this.options['lineclass'];
         }
     },
     
     _addResult: function(index, sessionName) {
-        if(this.ranges[sessionName][index].start.row == this.ranges[sessionName][index].end.row && this.ranges[sessionName][index].start.column == this.ranges[sessionName][index].end.column)
+        if(this.ranges[sessionName][index].start.row == this.ranges[sessionName][index].end.row && this.ranges[sessionName][index].start.column == this.ranges[sessionName][index].end.column) {
+            this.ranges[sessionName] = [];
             return; // empty result
+        }
         var line = this.ranges[sessionName][index].start.row;
         var col = this.ranges[sessionName][index].start.column;
         console.log('found row index ' + index + ' @ line: ' + line);

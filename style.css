@@ -27,3 +27,8 @@
         background: rgba(200, 200, 255, .5);
         width: 100%;
     }
+
+    #results {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 12px;
+    }
