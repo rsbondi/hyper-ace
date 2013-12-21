@@ -1,4 +1,3 @@
-// plunk: http://plnkr.co/edit/TdxBKMzCRWuw9pmMqwab?p=preview
 
 var hyperace = {
     editors:      Array(),
@@ -114,7 +113,7 @@ var hyperace = {
         var container = document.createElement('div');
         var link = document.createElement('a');
         container.appendChild(link);
-        link.href = '#';
+        link.href = 'javascript:void(0)';
         link.setAttribute('link-index', index);
         container.setAttribute('link-session', sessionName ? sessionName : '');
         var rawline = editor.getSession().getLine(line);
