@@ -2,12 +2,14 @@
 
 var hyperace = {
     editors:      Array(),
+    sessions:     Array(),
     target:       null,
     textbox:      null,
     activeEditor: 0,
     ranges:       null,
     options:      null,
     selected:     0,
+    _search:     null,
 
 
     /**
@@ -34,21 +36,49 @@ var hyperace = {
         }
     },
 
+    /**
+     * set sessions for multiple session search
+     * @param sessions Array<EditSession> array of ace.EditSession objects with the key as named identifier
+     */
+    setSessions: function (sessions) {
+        this.sessions = sessions;
+    },
+
+    /**
+     * set ace editor search options
+     * @param options object search option
+     */
     set: function(options) {
         var editor = this.editors[this.activeEditor];
         editor.$search.set(options);
     },
 
-    // options.regExp, options.wholeWord, options.caseSensitive
+    searchSessions: function () {
+        this.target.innerHTML = '';
+        var editor = this.editors[this.activeEditor];
+        var hold = editor.getSession();
+        for(s in this.sessions) {
+            this._search(this.sessions[s]);
+        }
+        editor.setSession(hold);
+    },
+
     search: function () {
+        this._search();
+    },
+
+    /**
+     * search the current session
+     */
+    _search: function (session) {
         console.log('hypersearch activated for expression: '+this.textbox.value);
         var editor = this.editors[this.activeEditor];
+        if(session) editor.setSession(session);
         var found = editor.findAll(this.textbox.value);
         editor.clearSelection();
         this.ranges = editor.getSelection().getAllRanges();
         console.log(JSON.stringify(this.ranges));
         editor.exitMultiSelectMode();
-        this.target.innerHTML = '';
         for (r = 0; r < this.ranges.length; r++) {
             this._addResult(r) ;
         }
@@ -86,6 +116,10 @@ var hyperace = {
         this.target.appendChild(container);
     },
 
+    clear: function() {
+        this.target.innerHTML = '';
+    },
+
     /**
      *
      * @param r1 Number range.start.row
@@ -119,4 +153,3 @@ var hyperace = {
             .replace(/'/g, "&#039;");
     }
 };
-

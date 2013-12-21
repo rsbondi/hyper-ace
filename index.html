@@ -14,6 +14,12 @@
     <label for="regex">regular expression</label><input id="regex" type="checkbox"/>&nbsp;
     <label for="case">match case</label><input id="case" type="checkbox"/>&nbsp;
     <label for="whole">whole word</label><input id="whole" type="checkbox"/>
+    <label for="acemode">Edit Mode:</label>
+    <select name="acemode" id="acemode">
+        <option value="javascript">javascript</option>
+        <option value="xml">html/xml</option>
+        <option value="css">css</option>
+    </select>
     <div id="results"></div>
 </div>
 
@@ -48,6 +54,10 @@
 
     document.getElementById("whole").addEventListener('click', function () {
         hyperace.set({"wholeWord": this.checked});
+    });
+
+    document.getElementById("acemode").addEventListener('change', function () {
+        editor.getSession().setMode({"path": "ace/mode/"+this.value});
     });
 
 </script>
