@@ -158,7 +158,8 @@ var hyperace = {
         if(link.getAttribute('link-session') !=0) editor.setSession(this.sessions[link.getAttribute('link-session')]);
         editor.focus();
         editor.moveCursorTo(pos.row, pos.column);
-        editor.selection.setRange(new aceRange(pos.row, pos.column, pos.row, this.ranges[link.getAttribute('link-session')][index].end.column));
+        var range = this.ranges[link.getAttribute('link-session')][index];
+        editor.selection.setRange(new aceRange(pos.row, pos.column, pos.row, range.end.column + pos.column - range.start.column));
 
         var links = this.target.getElementsByTagName('div'); // clear result line highlight and set for selected result
         for(l in links) {
