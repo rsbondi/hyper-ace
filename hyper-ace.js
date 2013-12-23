@@ -51,6 +51,9 @@ var hyperace = {
         editor.$search.set(options);
     },
 
+    /**
+     * search accross multiple sessions
+     */
     searchSessions: function () {
         this.target.innerHTML = '';
         this.ranges = [];
@@ -76,6 +79,9 @@ var hyperace = {
         editor.setSession(hold);
     },
 
+    /**
+     * search the current session
+     */
     search: function () {
         this.target.innerHTML = '';
         this.ranges = [];
@@ -85,7 +91,10 @@ var hyperace = {
     },
 
     /**
-     * search the current session
+     * performs the search and sets ranges and anchors
+     * @param session Session the session to search
+     * @param s       string  session identifier
+     * @private
      */
     _search: function (session, s) {
         console.log('hypersearch activated for expression: '+this.textbox.value);
@@ -107,7 +116,13 @@ var hyperace = {
             //this.target.getElementsByTagName('div')[s ? 1:0].className = this.options['lineclass'];
         }
     },
-    
+
+    /**
+     * add a search result to component
+     * @param index int           the index where the range and anchor info is stored
+     * @param sessionName string  the session indentifier for retrieving range and anchor info
+     * @private
+     */
     _addResult: function(index, sessionName) {
         if(this.ranges[sessionName][index].start.row == this.ranges[sessionName][index].end.row && this.ranges[sessionName][index].start.column == this.ranges[sessionName][index].end.column) {
             this.ranges[sessionName] = [];
@@ -142,7 +157,7 @@ var hyperace = {
     },
 
     /**
-     *
+     * this is called from the link's event listener whenever a search result link is clicked
      * @param r1 Number range.start.row
      * @param c1 Number range.start.column
      * @param r2 Number range.end.row
@@ -151,7 +166,6 @@ var hyperace = {
     _linkSelected: function(index, link) {
         console.log("linke selected: " + link.getAttribute('link-session'));
         var editor = this.editors[this.activeEditor];
-        var doc = editor.getSession().getDocument();
         var pos = this.anchors[link.getAttribute('link-session')][index].getPosition();
         var aceRange = ace.require('ace/range').Range;
 
