@@ -36,7 +36,7 @@ Initialize hyper-ace component
 ---------------------
 ```javascript
 // create hyperace
-hyperace.create(Array(editor), 'results', 'exp');
+hyperace.create(editor, 'results', 'exp');
 ```
 
 Add listeners

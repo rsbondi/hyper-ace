@@ -1,26 +1,24 @@
 
 var hyperace = {
-    editors:      Array(),
-    sessions:     Array(),
-    target:       null,
-    textbox:      null,
-    activeEditor: 0,
-    ranges:       null,
-    options:      null,
-    anchors:      Array(),
+    editor:       null,     // the editor
+    sessions:     Array(),  // array of editor sessions
+    target:       null,     // the dom element to append results
+    textbox:      null,     // where the search value is entered
+    activeEditor: 0,        // index to editors array
+    ranges:       null,     // the results of ranges to display
+    options:      null,     // additional options
+    anchors:      Array(),  // floating anchors that we jump to when a result is selected
 
 
     /**
      * Create hyperace element
-     * @param editors Array<Editor>    can apply to multiple editors
+     * @param editor Editor            the editor
      * @param target  string           where to display the results
      * @param textbox string           the search pattern element
      * @param options string           additional configuration
      */
-    create: function(editors, target, textbox, options) {
-        for(e in editors) {
-            this.editors.push(editors[e]);
-        }
+    create: function(editor, target, textbox, options) {
+        this.editor = editor;
         this.target = document.getElementById(target);
         this.textbox = document.getElementById(textbox);
         var self = this;
@@ -47,18 +45,17 @@ var hyperace = {
      * @param options object search option
      */
     set: function(options) {
-        var editor = this.editors[this.activeEditor];
-        editor.$search.set(options);
+        this.editor.$search.set(options);
     },
 
     /**
-     * search accross multiple sessions
+     * search across multiple sessions
      */
     searchSessions: function () {
         this.target.innerHTML = '';
         this.ranges = [];
         this.anchors = [];
-        var editor = this.editors[this.activeEditor];
+        var editor = this.editor;
         var hold = editor.getSession();
         for(s in this.sessions) {
             // TODO: check before creating header and skip if zero mathces.  Maybe return matches from _search and append here instead?
@@ -87,7 +84,7 @@ var hyperace = {
         this.ranges = [];
         this.anchors = [];
         this.anchors.push([]); // session id = 0
-        this._search(this.editors[this.activeEditor].getSession(), 0);
+        this._search(this.editor.getSession(), 0);
     },
 
     /**
@@ -98,7 +95,7 @@ var hyperace = {
      */
     _search: function (session, s) {
         console.log('hypersearch activated for expression: '+this.textbox.value);
-        var editor = this.editors[this.activeEditor];
+        var editor = this.editor;
         if(session) editor.setSession(session);
         var found = editor.findAll(this.textbox.value);
         editor.clearSelection();
@@ -165,7 +162,7 @@ var hyperace = {
      */
     _linkSelected: function(index, link) {
         console.log("linke selected: " + link.getAttribute('link-session'));
-        var editor = this.editors[this.activeEditor];
+        var editor = this.editor;
         var pos = this.anchors[link.getAttribute('link-session')][index].getPosition();
         var aceRange = ace.require('ace/range').Range;
 

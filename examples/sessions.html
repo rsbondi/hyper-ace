@@ -55,7 +55,7 @@
     });
     var sessions = [];
     function createhyper(box) {
-        hyperace.create(Array(editor), 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
+        hyperace.create(editor, 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
         hyperace.setSessions(sessions);
         box.addEventListener('keyup', function (e) { // look for tab key in search box
             if (e.keyCode == 9)

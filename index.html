@@ -32,7 +32,7 @@
     editor.getSession().setMode("ace/mode/javascript");
 
     // create hyperace and listener
-    hyperace.create(Array(editor), 'results', 'exp');
+    hyperace.create(editor, 'results', 'exp');
     // for jQuery if you must
     // $('#search').click(function () {
     document.getElementById('search').addEventListener('click', function () {
