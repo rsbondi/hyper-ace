@@ -7,6 +7,7 @@ var hyperace = {
     activeEditor: 0,
     ranges:       null,
     options:      null,
+    anchors:      Array(),
 
 
     /**
@@ -53,10 +54,12 @@ var hyperace = {
     searchSessions: function () {
         this.target.innerHTML = '';
         this.ranges = [];
+        this.anchors = [];
         var editor = this.editors[this.activeEditor];
         var hold = editor.getSession();
         for(s in this.sessions) {
             // TODO: check before creating header and skip if zero mathces.  Maybe return matches from _search and append here instead?
+            this.anchors[s] = [];
             var session = document.createElement('div');
             session.innerHTML = s;
             session.className = 'hyperace-session';
@@ -76,7 +79,9 @@ var hyperace = {
     search: function () {
         this.target.innerHTML = '';
         this.ranges = [];
-        this._search();
+        this.anchors = [];
+        this.anchors.push([]); // session id = 0
+        this._search(this.editors[this.activeEditor].getSession(), 0);
     },
 
     /**
@@ -92,6 +97,7 @@ var hyperace = {
         console.log(JSON.stringify(this.ranges[s]));
         editor.exitMultiSelectMode();
         for (r = 0; r < this.ranges[s].length; r++) {
+            this.anchors[s].push(editor.getSession().getDocument().createAnchor(this.ranges[s][r].start.row, this.ranges[s][r].start.column));
             this._addResult(r,s) ;
         }
         if(this.ranges[s].length>0){
@@ -115,7 +121,7 @@ var hyperace = {
         container.appendChild(link);
         link.href = 'javascript:void(0)';
         link.setAttribute('link-index', index);
-        container.setAttribute('link-session', sessionName ? sessionName : '');
+        container.setAttribute('link-session', sessionName ? sessionName : 0);
         var rawline = editor.getSession().getLine(line);
         var pre = rawline.substr(0,this.ranges[sessionName][index].start.column );
         var match = rawline.substr(this.ranges[sessionName][index].start.column, this.ranges[sessionName][index].end.column - this.ranges[sessionName][index].start.column);
@@ -126,7 +132,7 @@ var hyperace = {
         var self = this;
         link.addEventListener('click', function () {
             var index = this.getAttribute('link-index');
-            self._linkSelected( self.ranges[sessionName][index].start.row, self.ranges[sessionName][index].start.column, self.ranges[sessionName][index].end.row,self.ranges[sessionName][index].end.column, this.parentNode )
+            self._linkSelected( index, this.parentNode );
         });
         this.target.appendChild(container);
     },
@@ -142,15 +148,17 @@ var hyperace = {
      * @param r2 Number range.end.row
      * @param c2 Number range.end.column
      */
-    _linkSelected: function(r1, c1, r2, c2, link) {
+    _linkSelected: function(index, link) {
         console.log("linke selected: " + link.getAttribute('link-session'));
         var editor = this.editors[this.activeEditor];
+        var doc = editor.getSession().getDocument();
+        var pos = this.anchors[link.getAttribute('link-session')][index].getPosition();
         var aceRange = ace.require('ace/range').Range;
 
-        if(link.getAttribute('link-session') !='') editor.setSession(this.sessions[link.getAttribute('link-session')]);
+        if(link.getAttribute('link-session') !=0) editor.setSession(this.sessions[link.getAttribute('link-session')]);
         editor.focus();
-        editor.moveCursorTo(r2, c2);
-        editor.selection.setRange(new aceRange(r1, c1, r2, c2));
+        editor.moveCursorTo(pos.row, pos.column);
+        editor.selection.setRange(new aceRange(pos.row, pos.column, pos.row, this.ranges[link.getAttribute('link-session')][index].end.column));
 
         var links = this.target.getElementsByTagName('div'); // clear result line highlight and set for selected result
         for(l in links) {
