@@ -32,28 +32,28 @@
     editor.getSession().setMode("ace/mode/javascript");
 
     // create hyperace and listener
-    hyperace.create(editor, 'results', 'exp');
+    var hyper = hyperace.create(editor, 'results', 'exp');
     // for jQuery if you must
     // $('#search').click(function () {
     document.getElementById('search').addEventListener('click', function () {
-        hyperace.search();
+        hyper.search();
     });
 
     document.getElementById('exp').addEventListener('keyup', function (e) {
         if (e.keyCode == 13)
-            hyperace.search();
+            hyper.search();
     });
 
     document.getElementById("regex").addEventListener('click', function () {
-        hyperace.set({"regExp": this.checked});
+        hyper.set({"regExp": this.checked});
     });
 
     document.getElementById("case").addEventListener('click', function () {
-        hyperace.set({"caseSensitive": this.checked});
+        hyper.set({"caseSensitive": this.checked});
     });
 
     document.getElementById("whole").addEventListener('click', function () {
-        hyperace.set({"wholeWord": this.checked});
+        hyper.set({"wholeWord": this.checked});
     });
 
     document.getElementById("acemode").addEventListener('change', function () {

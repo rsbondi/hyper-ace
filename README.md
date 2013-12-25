@@ -36,7 +36,7 @@ Initialize hyper-ace component
 ---------------------
 ```javascript
 // create hyperace
-hyperace.create(editor, 'results', 'exp');
+var hyper = hyperace.create(editor, 'results', 'exp');
 ```
 
 Add listeners
@@ -46,7 +46,7 @@ Add listeners
 // for jQuery if you must
 // $('#search').click(function () {
 document.getElementById('search').addEventListener('click', function () {
-   hyperace.search();
+   hyper.search();
 });
 ```
 

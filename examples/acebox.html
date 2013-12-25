@@ -27,6 +27,7 @@
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/eclipse");
     editor.getSession().setMode("ace/mode/javascript");
+    var hyper;
 
     // undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
     ace.config.loadModule("ace/ext/searchbox", function(e) {
@@ -35,10 +36,10 @@
         box.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
         box.addEventListener('keyup', function (e) { // look for tab key in search box
             if (e.keyCode == 9)
-                hyperace.search();
+                hyper.search();
         });
 
-        hyperace.create(editor, 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
+        hyper = hyperace.create(editor, 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
 
     });
 

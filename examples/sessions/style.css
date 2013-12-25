@@ -1,0 +1,80 @@
+    #editor {
+        height: 300px;
+        width: 100%;
+        border: 1px solid gray;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+    #hyper {
+        clear: both;
+        padding: 10px;
+    }
+
+    #hyper header {
+        display: inline-block;
+        font-weight: 600;
+    }
+
+    #results a {
+      text-decoration: none;
+      color: gray;
+    }
+
+    .hyperace-match{
+        background: rgba(255, 255,54,  .5);
+    }
+
+    .hyperace-line {
+        background: rgba(200, 200, 255, .5);
+        width: 100%;
+    }
+
+    #results {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 12px;
+        height: 400px;
+        overflow: auto;
+        border: 1px solid gray;
+    }
+
+    .hyperace-session {
+        font-size: 1.5em;
+        margin: 2px 0;
+        background: #efefef;
+        padding: 2px;
+        text-align: center;
+        border: 1px solid;
+        border-right: 0;
+        border-left: 0;
+    }
+
+    body, select {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size:12px;
+        color: gray;
+    }
+
+    nav .tabs {
+        margin-bottom: 0;
+    }
+    nav .tabs li {
+        border: 1px solid gray;
+        border-bottom: 1px solid white;
+        background: lightgray;
+        display: inline-block;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+    }
+
+    nav .tabs li a{
+        text-decoration: none;
+        display: inline-block;
+        padding: 10px;
+    }
+
+    nav .tabs li.on {
+        background: white;
+    }
+

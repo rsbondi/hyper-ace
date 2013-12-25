@@ -54,12 +54,13 @@
         $('#acemode').val(e.session.tag);
     });
     var sessions = [];
+    var hyper;
     function createhyper(box) {
-        hyperace.create(editor, 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
-        hyperace.setSessions(sessions);
+        hyper = hyperace.create(editor, 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
+        hyper.setSessions(sessions);
         box.addEventListener('keyup', function (e) { // look for tab key in search box
             if (e.keyCode == 9)
-                hyperace.searchSessions();
+                hyper.searchSessions();
         });
     }
 
@@ -103,7 +104,7 @@
 
     document.getElementById("acemode").addEventListener('change', function() {
         editor.setSession(sessions[this.value]);
-        hyperace.search();
+        hyper.search();
     });
 
 </script>

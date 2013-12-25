@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="utf-8">
+</head>
+
+<body>
+<nav>
+    <ul class="tabs">
+        <li class="on"><a id="sessions.js" href="#">sessions.js</a></li>
+        <li><a id="sessions.html" href="#">sessions.html</a></li>
+        <li><a id="style.css" href="#">style.css</a></li>
+    </ul>
+</nav>
+<div class="container">
+<div id="editor"></div>
+</div>
+<div id="hyper">
+    <div>
+        <header>Tab to hypersearch</header>
+        <label for="hyperall">Search All</label>
+        <input type="radio" id="hyperall" name="hyperwho" checked="checked"/>
+        <label for="hypercur">Search Current</label>
+        <input type="radio" id="hypercur" name="hyperwho" />
+    </div>
+    <div id="results"></div>
+    <p>This example shows the use of a search across multiple edit sessions.  Hit the [tab] key in the search box and the search
+        will be performed according to the radio selection.  Otherwise, the search box functions as the ace default.
+        Selecting a result will jump to the selection in the editor for appropriate file.  The source code for this example
+        are the files loaded into the editor.</p>
+</div>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../hyper-ace.js"></script>
+<script src="sessions.js"></script>
+</body>
+
+</html>
