@@ -18,13 +18,7 @@
 <div id="editor"></div>
 </div>
 <div id="hyper">
-    <div>
-        <header>Tab to hypersearch</header>
-        <label for="hyperall">Search All</label>
-        <input type="radio" id="hyperall" name="hyperwho" checked="checked"/>
-        <label for="hypercur">Search Current</label>
-        <input type="radio" id="hypercur" name="hyperwho" />
-    </div>
+    <h3>Search Results</h3>
     <div id="results"></div>
     <p>This example shows the use of a search across multiple edit sessions.  Hit the [tab] key in the search box and the search
         will be performed according to the radio selection.  Otherwise, the search box functions as the ace default.
@@ -35,6 +29,17 @@
 <script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script src="../../hyper-ace.js"></script>
 <script src="sessions.js"></script>
+<div id="appendopt">
+    <div id="hyperopt">
+        <header>Hypersearch options [tab] to activate</header>
+        <label for="hyperall">Search All</label>
+        <input type="radio" id="hyperall" name="hyperwho" checked="checked"/>
+        &nbsp;&nbsp;&nbsp;
+        <label for="hypercur">Search Current</label>
+        <input type="radio" id="hypercur" name="hyperwho" />
+    </div>
+
+</div>
 </body>
 
 </html>

@@ -9,12 +9,18 @@
     }
     #hyper {
         clear: both;
-        padding: 10px;
+        padding: 0 10px 10px 10px;
     }
 
     #hyper header {
         display: inline-block;
         font-weight: 600;
+    }
+
+    #hyperopt {
+        padding: 3px;
+        border-top: 1px solid #aaaaaa;
+        color: gray;
     }
 
     #results a {
@@ -76,5 +82,9 @@
 
     nav .tabs li.on {
         background: white;
+    }
+
+    #appendopt {
+        display: none;
     }
 

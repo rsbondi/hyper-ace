@@ -2,15 +2,15 @@ var hyperace = function () {}
 
 hyperace.create = function (editor, target, textbox, options) {
     var hyper = {
-        editor: null,     // the editor
-        sessions: Array(),  // array of editor sessions
-        target: null,     // the dom element to append results
+        editor: null,      // the editor
+        sessions: Array(), // array of editor sessions
+        target: null,      // the dom element to append results
         textbox: null,     // where the search value is entered
-        activeEditor: 0,        // index to editors array
-        ranges: null,     // the results of ranges to display
+        activeEditor: 0,   // index to editors array
+        ranges: null,      // the results of ranges to display
         options: null,     // additional options
         anchors: Array(),  // floating anchors that we jump to when a result is selected
-        currentSession: 0,
+        currentSession: 0, // the current edit session identifier
 
 
         /**
