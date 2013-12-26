@@ -88,5 +88,61 @@ To search
 
 ```javascript
 hyper.searchSessions();
-
 ```
+
+API
+===
+
+```javascript
+clear()
+```
+
+clears search results
+
+```javascript
+create (editor, target, textbox, options)
+```
+
+Create hyperace element
+
+* {Editor} *editor*   the editor
+* {string} *target*   where to display the results
+* {string} *textbox*  the search pattern element
+* {string} *options*  additional configuration
+
+```javascript
+search()
+```
+
+search the current session
+
+```javascript
+searchSessions()
+```
+
+search across multiple sessions
+
+```javascript
+set(options)
+```
+
+set ace editor search options
+
+* {object} *options* search option
+
+```javascript
+setSession(identifier)
+```
+
+update the session for hyper-ace and ace
+
+* {string} *identifier* the identifer for the session to set
+
+```javascript
+setSessions(sessions)
+```
+
+set sessions for multiple session search
+
+* {Array<EditSession>} *sessions* array of ace.EditSession objects with the key as named identifier
+

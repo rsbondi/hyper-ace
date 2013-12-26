@@ -15,10 +15,10 @@ hyperace.create = function (editor, target, textbox, options) {
 
         /**
          * Create hyperace element
-         * @param editor Editor            the editor
-         * @param target  string           where to display the results
-         * @param textbox string           the search pattern element
-         * @param options string           additional configuration
+         * @param {Editor} editor  the editor
+         * @param {string} target  where to display the results
+         * @param {string} textbox the search pattern element
+         * @param {string} options additional configuration
          */
         create: function (editor, target, textbox, options) {
             this.editor = editor;
@@ -38,7 +38,7 @@ hyperace.create = function (editor, target, textbox, options) {
 
         /**
          * set sessions for multiple session search
-         * @param sessions Array<EditSession> array of ace.EditSession objects with the key as named identifier
+         * @param {Array<EditSession>} sessions array of ace.EditSession objects with the key as named identifier
          */
         setSessions: function (sessions) {
             this.sessions = sessions;
@@ -51,7 +51,7 @@ hyperace.create = function (editor, target, textbox, options) {
 
         /**
          * set ace editor search options
-         * @param options object search option
+         * @param {object} options search option
          */
         set: function (options) {
             this.editor.$search.set(options);
@@ -67,7 +67,6 @@ hyperace.create = function (editor, target, textbox, options) {
             var editor = this.editor;
             var hold = editor.getSession();
             for (s in this.sessions) {
-                // TODO: check before creating header and skip if zero mathces.  Maybe return matches from _search and append here instead?
                 this.anchors[s] = [];
                 var session = document.createElement('div');
                 session.innerHTML = s;
@@ -77,11 +76,6 @@ hyperace.create = function (editor, target, textbox, options) {
                 this._search(this.sessions[s], s);
                 console.log('session: ' + s + ': ' + this.ranges[s].length + ' matches.')
                 if (this.ranges[s].length == 0) {
-/*
-                    var nogo = document.createElement('div');
-                    nogo.innerHTML = 'no matches found';
-                    this.target.appendChild(nogo);
-*/
                     this.target.removeChild(session)
                 }
             }
@@ -108,8 +102,8 @@ hyperace.create = function (editor, target, textbox, options) {
 
         /**
          * performs the search and sets ranges and anchors
-         * @param session Session the session to search
-         * @param s       string  session identifier
+         * @param {EditSession} session the session to search
+         * @param {string}  session identifier
          * @private
          */
         _search: function (session, s) {
@@ -136,8 +130,8 @@ hyperace.create = function (editor, target, textbox, options) {
 
         /**
          * add a search result to component
-         * @param index int           the index where the range and anchor info is stored
-         * @param sessionName string  the session indentifier for retrieving range and anchor info
+         * @param {int} index the index where the range and anchor info is stored
+         * @param {string} sessionName the session indentifier for retrieving range and anchor info
          * @private
          */
         _addResult: function (index, sessionName) {
@@ -175,10 +169,10 @@ hyperace.create = function (editor, target, textbox, options) {
 
         /**
          * this is called from the link's event listener whenever a search result link is clicked
-         * @param r1 Number range.start.row
-         * @param c1 Number range.start.column
-         * @param r2 Number range.end.row
-         * @param c2 Number range.end.column
+         * @param {Number} r1 range.start.row
+         * @param {Number} c1 range.start.column
+         * @param {Number} r2 range.end.row
+         * @param {Number} c2 range.end.column
          */
         _linkSelected: function (index, link) {
             console.log("link selected for session: " + link.getAttribute('link-session') + ' at index: ' + index);
@@ -201,6 +195,10 @@ hyperace.create = function (editor, target, textbox, options) {
             link.className = this.options['lineclass'];
         },
 
+        /**
+         * update the session for hyper-ace and ace
+         * @param {string} identifier the identifer for the session to set
+         */
         setSession: function (identifier) {
             this.editor.setSession(this.sessions[identifier]);
             this.currentSession = identifier;
