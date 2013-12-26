@@ -28,6 +28,7 @@ ace.config.loadModule("ace/ext/searchbox", function(e) {
     box.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
     box.value = "result" // example that works in all 3 modes
     $('.ace_search').append($('#appendopt').html());
+    document.body.removeChild($('#appendopt')[0])
 
     var sessioncount = 0; // track for all 3 sessions loaded
     $.get('sessions.js', function(data) {

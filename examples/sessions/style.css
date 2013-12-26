@@ -47,10 +47,10 @@
 
     .hyperace-session {
         font-size: 1.5em;
-        margin: 2px 0;
+        margin: 8px 0;
         background: #efefef;
         padding: 2px;
-        text-align: center;
+        text-align: left;
         border: 1px solid;
         border-right: 0;
         border-left: 0;

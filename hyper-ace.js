@@ -77,9 +77,12 @@ hyperace.create = function (editor, target, textbox, options) {
                 this._search(this.sessions[s], s);
                 console.log('session: ' + s + ': ' + this.ranges[s].length + ' matches.')
                 if (this.ranges[s].length == 0) {
+/*
                     var nogo = document.createElement('div');
                     nogo.innerHTML = 'no matches found';
                     this.target.appendChild(nogo);
+*/
+                    this.target.removeChild(session)
                 }
             }
             editor.setSession(hold);
@@ -114,7 +117,8 @@ hyperace.create = function (editor, target, textbox, options) {
             var editor = this.editor;
             if (session) editor.setSession(session);
             var found = editor.findAll(this.textbox.value);
-            editor.clearSelection();
+            if(found==0) editor.clearSelection();
+            console.log('found '+found+' matches in '+s)
             this.ranges[s] = editor.getSelection().getAllRanges();
             console.log(JSON.stringify(this.ranges[s]));
             editor.exitMultiSelectMode();
