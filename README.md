@@ -9,7 +9,7 @@ Create HTML
 ```xml
 <div id="editor"></div>
 <div id="hyper">
-    <input type="text" id="exp"/>
+    <input type="text" id="needle"/>
     <button id="search">Search</button>
     <div id="results">results</div>
 </div>
@@ -36,7 +36,7 @@ Initialize hyper-ace component
 ---------------------
 ```javascript
 // create hyperace
-var hyper = hyperace.create(editor, 'results', 'exp');
+var hyper = hyperace.create(editor, 'results', 'needle');
 ```
 
 Add listeners
@@ -50,3 +50,43 @@ document.getElementById('search').addEventListener('click', function () {
 });
 ```
 
+
+For multiple sessions
+=====================
+
+Create sessions
+---------------
+
+```javascript
+var sessions = [];
+
+// ex. blank editor in css mod
+var session = new ace.EditSession('', {
+    "path": "ace/mode/css" 
+});
+sessions['style.css'] = session;
+
+// repeat for each session
+```
+
+Add sessions to hyper-ace
+-------------------------
+
+```javascript
+hyper.setSessions(sessions); 
+```
+
+When switching editor sessions, just tell hyper-ace the identifier and it will switch the ace session
+
+
+```javascript
+hyper.setSession('style.css');
+```
+
+To search
+---------
+
+```javascript
+hyper.searchSessions();
+
+```
