@@ -1,0 +1,28 @@
+    #editor {
+        height: 300px;
+        width: 100%;
+        border: 1px solid gray;
+    }
+    #hyper {
+        clear: both;
+        padding: 10px;
+    }
+
+    #results a {
+      text-decoration: none;
+      color: gray;
+    }
+
+    .hyperace-match{
+        background: rgba(255, 255,54,  .5);
+    }
+
+    .hyperace-line {
+        background: rgba(200, 200, 255, .5);
+        width: 100%;
+    }
+
+    #results {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 12px;
+    }
