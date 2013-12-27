@@ -100,7 +100,7 @@ hyperace
 create (editor, target, textbox, options)
 ```
 
-Create hypersearch instance
+Static function to create hypersearch instance
 
 * {Editor} *editor*   the editor
 * {string} *target*   where to display the results
@@ -110,8 +110,6 @@ Create hypersearch instance
 
 hypersearch
 -----------
-
-The hypersearch
 
 ```javascript
 clear()
