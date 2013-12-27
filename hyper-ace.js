@@ -24,7 +24,6 @@ hyperace.create = function (editor, target, textbox, options) {
  * @class hypersearch
  */
 var hypersearch = function(editor, target, textbox, options) {
-    this.sessions = [] ; // array of editor sessions
     this.activeEditor = 0 ;   // index to editors array
     this.ranges = null ;      // the results of ranges to display
     this.anchors = [] ;  // floating anchors that we jump to when a result is selected
@@ -32,7 +31,6 @@ var hypersearch = function(editor, target, textbox, options) {
     this.editor = editor;
     this.target = document.getElementById(target);
     this.textbox = document.getElementById(textbox);
-    var self = this;
     this.options = options ? options : [];
     if (options) {
         this.options['matchclass'] = options['matchclass'] ? options['matchclass'] : 'hyperace-match';
