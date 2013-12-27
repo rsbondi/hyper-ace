@@ -135,11 +135,9 @@ set(options)
 
 set ace editor search options
 
-* {object} *options* search option, set any of the following to true or false ex.
-    hyper.set({"regExp": false, "wholeWord": true});
-** "regExp"
-** "caseSensitive"
-** "wholeWord"
+* {object} *options* search option, set any of the following to true or false ex. hyper.set({"regExp": false, "wholeWord": true});
+
+available options: "regExp", "caseSensitive", "wholeWord"
 
 ```javascript
 setSession(identifier)
