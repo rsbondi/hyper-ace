@@ -93,22 +93,31 @@ hyper.searchSessions();
 API
 ===
 
-```javascript
-clear()
-```
-
-clears search results
+hyperace
+--------
 
 ```javascript
 create (editor, target, textbox, options)
 ```
 
-Create hyperace element
+Create hypersearch instance
 
 * {Editor} *editor*   the editor
 * {string} *target*   where to display the results
 * {string} *textbox*  the search pattern element
 * {string} *options*  additional configuration
+* return hypersearch
+
+hypersearch
+-----------
+
+The hypersearch
+
+```javascript
+clear()
+```
+
+clears search results
 
 ```javascript
 search()
