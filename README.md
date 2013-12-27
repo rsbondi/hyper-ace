@@ -106,7 +106,7 @@ Static function to create hypersearch instance
 * {string} *target*   where to display the results
 * {string} *textbox*  the search pattern element
 * {string} *options*  additional configuration
-* return hypersearch
+* return {hypersearch}
 
 hypersearch
 -----------
