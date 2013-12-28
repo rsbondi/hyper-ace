@@ -110,7 +110,7 @@ hyperace.hypersearch.prototype = {
     /**
      * performs the search and sets ranges and anchors
      * @param {EditSession} session the session to search
-     * @param {string}  session identifier
+     * @param {string} s session identifier
      * @private
      */
     _search: function (session, s) {
@@ -126,12 +126,6 @@ hyperace.hypersearch.prototype = {
         for (r = 0; r < this.ranges[s].length; r++) {
             this.anchors[s].push(editor.getSession().getDocument().createAnchor(this.ranges[s][r].start.row, this.ranges[s][r].start.column));
             this._addResult(r, s);
-        }
-        if (this.ranges[s].length > 0) {
-            // hack for no scroll when first item selected, select it by default
-            editor.moveCursorTo(this.ranges[s][0].start.row, this.ranges[s][0].start.column);
-            editor.find(this.textbox.value);
-            //this.target.getElementsByTagName('div')[s ? 1:0].className = this.options['lineclass'];
         }
     },
 
