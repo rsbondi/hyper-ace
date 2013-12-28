@@ -1,5 +1,14 @@
 A hypersearch component for ace editor that allows you to search the editor and display a list of all results.  Clicking the result will take you to the proper place in the editor.  Searching accross multiple edit sessions is supported.  You can experiment with the plunk [here](http://plnkr.co/edit/60xwqi?p=preview).  See issues section for list of todo items.
 
+Examples
+--------
+
+Here are the examples from the examples directory
+
+* [basic](http://richardbondi.net/hyper-ace/examples/basic/basic.html): Shows basic usage using an external textbox for searching and checkboxes for search options.
+* [acebox](http://richardbondi.net/hyper-ace/examples/acebox/acebox.html): Uses the built in ace search form.
+* [sessions](http://richardbondi.net/hyper-ace/examples/sessions/sessions.html): Advanced example using the built in ace search form, extending the form for hypersearch and searching accross multiple sessions.
+
 Usage
 =====
 
