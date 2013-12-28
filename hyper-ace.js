@@ -12,7 +12,7 @@ var hyperace = function () {}
  * @returns {hypersearch}
  */
 hyperace.create = function (editor, target, textbox, options) {
-    return new hypersearch(editor, target, textbox, options);
+    return new hyperace.hypersearch(editor, target, textbox, options);
 }
 
 /**
@@ -23,7 +23,7 @@ hyperace.create = function (editor, target, textbox, options) {
  * @param {string} options additional configuration
  * @class hypersearch
  */
-var hypersearch = function(editor, target, textbox, options) {
+hyperace.hypersearch = function(editor, target, textbox, options) {
     this.activeEditor = 0 ;   // index to editors array
     this.ranges = null ;      // the results of ranges to display
     this.anchors = [] ;  // floating anchors that we jump to when a result is selected
@@ -42,7 +42,7 @@ var hypersearch = function(editor, target, textbox, options) {
     this.sessions = Array(editor.getSession());                  // set for single session, over-ridden for multi
 };
 
-hypersearch.prototype = {
+hyperace.hypersearch.prototype = {
     /**
      * set sessions for multiple session search
      * @param {Array<EditSession>} sessions array of ace.EditSession objects with the key as named identifier
@@ -58,7 +58,7 @@ hypersearch.prototype = {
 
     /**
      * set ace editor search options
-     * @param {object} options search option
+     * @param {object} options search options, true or false for any of (regExp, caseSensitive or wholeWord)
      */
     set: function (options) {
         this.editor.$search.set(options);
