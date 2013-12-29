@@ -170,10 +170,8 @@ hyperace.hypersearch.prototype = {
 
     /**
      * this is called from the link's event listener whenever a search result link is clicked
-     * @param {Number} r1 range.start.row
-     * @param {Number} c1 range.start.column
-     * @param {Number} r2 range.end.row
-     * @param {Number} c2 range.end.column
+     * @param {Number} index index to the result anchor
+     * @param {Element} link the result element that was clicked
      */
     _linkSelected: function (index, link) {
         console.log("link selected for session: " + link.getAttribute('link-session') + ' at index: ' + index);
