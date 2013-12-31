@@ -147,8 +147,8 @@ hyperace.hypersearch.prototype = {
         var link = document.createElement('a');
         container.appendChild(link);
         link.href = 'javascript:void(0)';
-        link.setAttribute('link-index', index);
-        container.setAttribute('link-session', sessionName ? sessionName : 0);
+        link.setAttribute('data-index', index);
+        container.setAttribute('data-session', sessionName ? sessionName : 0);
         var rawline = this.editor.getSession().getLine(line);
         var pre = rawline.substr(0, this.ranges[sessionName][index].start.column);
         var match = rawline.substr(this.ranges[sessionName][index].start.column, this.ranges[sessionName][index].end.column - this.ranges[sessionName][index].start.column);
@@ -158,7 +158,7 @@ hyperace.hypersearch.prototype = {
         link.innerHTML += '(' + (line + 1) + ',' + (col + 1) + ') ' + resultline + '<br/>';
         var self = this;
         link.addEventListener('click', function () {
-            var index = this.getAttribute('link-index');
+            var index = this.getAttribute('data-index');
             self._linkSelected(index, this.parentNode);
         });
         this.target.appendChild(container);
@@ -174,17 +174,17 @@ hyperace.hypersearch.prototype = {
      * @param {Element} link the result element that was clicked
      */
     _linkSelected: function (index, link) {
-        console.log("link selected for session: " + link.getAttribute('link-session') + ' at index: ' + index);
+        console.log("link selected for session: " + link.getAttribute('data-session') + ' at index: ' + index);
         var editor = this.editor;
-        var pos = this.anchors[link.getAttribute('link-session')][index].getPosition();
+        var pos = this.anchors[link.getAttribute('data-session')][index].getPosition();
         var aceRange = ace.require('ace/range').Range;
 
-        this.currentSession = link.getAttribute('link-session');
+        this.currentSession = link.getAttribute('data-session');
         console.log('session changeing to: ' + this.currentSession);
         this.setSession(this.currentSession);
         editor.focus();
         editor.moveCursorTo(pos.row, pos.column);
-        var range = this.ranges[link.getAttribute('link-session')][index];
+        var range = this.ranges[link.getAttribute('data-session')][index];
         editor.selection.setRange(new aceRange(pos.row, pos.column, pos.row, range.end.column + pos.column - range.start.column));
 
         var links = this.target.getElementsByTagName('div'); // clear result line highlight and set for selected result
