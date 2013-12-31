@@ -8,6 +8,7 @@ Here are the examples from the examples directory
 * [basic](http://richardbondi.net/hyper-ace/examples/basic/basic.html): Shows basic usage using an external textbox for searching and checkboxes for search options.
 * [acebox](http://richardbondi.net/hyper-ace/examples/acebox/acebox.html): Uses the built in ace search form.
 * [sessions](http://richardbondi.net/hyper-ace/examples/sessions/sessions.html): Advanced example using the built in ace search form, extending the form for hypersearch and searching accross multiple sessions.
+* [instances](http://richardbondi.net/hyper-ace/examples/instances/instances.html): The 3 above examples combined on one page to show multiple instances.
 
 Usage
 =====

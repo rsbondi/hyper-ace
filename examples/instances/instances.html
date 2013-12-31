@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css"/>
+    <meta charset="utf-8">
+</head>
+
+<body>
+<h1>basic</h1>
+<div class="container"><div id="editor"></div></div>
+<div id="hyper">
+    <input type="text" id="exp"/>
+    <button id="search">Search</button>
+    <label for="regex">regular expression</label><input id="regex" type="checkbox"/>&nbsp;
+    <label for="case">match case</label><input id="case" type="checkbox"/>&nbsp;
+    <label for="whole">whole word</label><input id="whole" type="checkbox"/>
+    <label for="acemode">Edit Mode:</label>
+    <select name="acemode" id="acemode">
+        <option value="javascript">javascript</option>
+        <option value="xml">html/xml</option>
+        <option value="css">css</option>
+    </select>
+
+    <div id="results"></div>
+
+</div>
+    <hr/>
+<div class="middle">
+    <h1>acebox</h1>
+<div class="container"><div id="editor2"></div></div>
+    <div id="hyper2">
+        <label for="acemode2">Edit Mode:</label>
+        <select name="acemode2" id="acemode2">
+            <option value="javascript">javascript</option>
+            <option value="xml">html/xml</option>
+            <option value="css">css</option>
+        </select>
+
+        <h3>Hypersearch with [tab] key in search box</h3>
+
+        <div id="results2"></div>
+    </div>
+
+</div>
+<hr/>
+
+    <h1>sessions</h1>
+<nav>
+    <ul class="tabs">
+        <li class="on"><a id="instances.js" href="javascript:void(0)">instances.js</a></li>
+        <li><a id="instances.html" href="javascript:void(0)">instances.html</a></li>
+        <li><a id="style.css" href="javascript:void(0)">style.css</a></li>
+    </ul>
+</nav>
+<div class="container">
+    <div id="editor3"></div>
+</div>
+<div id="hyper3">
+    <h3>Search Results</h3>
+    <div id="results3"></div>
+    <p>This example shows the use of a search across multiple edit sessions.  Hit the [tab] key in the search box and the search
+        will be performed according to the radio selection.  Otherwise, the search box functions as the ace default.
+        Selecting a result will jump to the selection in the editor for appropriate file.  The source code for this example
+        are the files loaded into the editor.</p>
+</div>
+<div id="appendopt">
+    <div id="hyperopt">
+        <header>Hypersearch options [tab] to activate</header>
+        <label for="hyperall">Search All</label>
+        <input type="radio" id="hyperall" name="hyperwho" checked="checked"/>
+        &nbsp;&nbsp;&nbsp;
+        <label for="hypercur">Search Current</label>
+        <input type="radio" id="hypercur" name="hyperwho" />
+    </div>
+
+</div>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../hyper-ace.js"></script>
+<script src="instances.js"></script>
+</body>
+
+</html>

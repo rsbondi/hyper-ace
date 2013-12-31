@@ -1,4 +1,4 @@
-    #editor {
+    #editor, #editor2, #editor3 {
         height: 300px;
         width: 100%;
         border: 1px solid gray;
@@ -7,12 +7,15 @@
     .container {
         padding: 0 10px;
     }
-    #hyper {
+    .middle, #editor2 {
+        background: #fffff0;
+    }
+    #hyper, #hyper2, #hyper3 {
         clear: both;
         padding: 0 10px 10px 10px;
     }
 
-    #hyper header {
+    #hyper header, #hyper2 header, #hyper3 header {
         display: inline-block;
         font-weight: 600;
     }
@@ -23,7 +26,7 @@
         color: gray;
     }
 
-    #results a {
+    #results a,#results2 a,#results3 a {
       text-decoration: none;
       color: gray;
     }
@@ -37,7 +40,7 @@
         width: 100%;
     }
 
-    #results {
+    #results,#results2,#results3 {
         font-family: "Courier New", Courier, monospace;
         font-size: 12px;
         height: 400px;
