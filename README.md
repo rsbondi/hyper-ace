@@ -110,15 +110,15 @@ hyperace
 --------
 
 ```javascript
-create (editor, target, textbox, options)
+create (editor, target, [textbox], [options])
 ```
 
 Static function to create hypersearch instance
 
 * {Editor} *editor*   the editor
 * {string} *target*   where to display the results
-* {string} *textbox*  the search pattern element
-* {string} *options*  additional configuration
+* {string} *textbox*  the search pattern element (optional)
+* {string} *options*  additional configuration (optional)
 * return {hypersearch}
  
 options:
