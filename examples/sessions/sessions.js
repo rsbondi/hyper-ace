@@ -6,40 +6,24 @@ editor.on("changeSession", function(e) {
     setTab(hyper.currentSession);
 });
 var sessions = [];
-var hyper;
-function createhyper(box) {
-    hyper = hyperace.create(editor, 'results', 'hyperbox'); // add hyper-ace editor, target and search box id created above
-    hyper.setSessions(sessions);
-    box.addEventListener('keyup', function (e) { // look for tab key in search box
-        if (e.keyCode == 9) {
-            if(document.getElementById('hyperall').checked) {
-                hyper.searchSessions();
-            } else {
-                hyper.search();
-            }
-        }
-    });
-}
-
-// undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
-ace.config.loadModule("ace/ext/searchbox", function(e) {
-    e.Search(editor); // set to editor component
-    var box = document.getElementById('editor').getElementsByClassName('ace_search_field')[0]; // get texbox element
-    box.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
-    box.value = "result" // example that works in all 3 modes
+var hyper = hyperace.create(editor, 'results', null, {'load': function () {
+    hyper.searchMultiSession = true;
     $('.ace_search').append($('#appendopt').html());
     document.body.removeChild($('#appendopt')[0]);
+    $('[name=hyperwho]').change(function () {
+        hyper.searchMultiSession = this.id == 'hyperall' ;
+    });
 
     var sessioncount = 0; // track for all 3 sessions loaded
     // load content from project files
     $.get('sessions.js', function(data) {
-        sessions['sessions.js'] = editor.getSession();
-        editor.getSession().setValue(data);
-        sessioncount++;
-        if (sessioncount == 3) createhyper(box);
+            sessions['sessions.js'] = editor.getSession();
+            editor.getSession().setValue(data);
+            sessioncount++;
+            if (sessioncount == 3) hyper.setSessions(sessions);
 
-    },
-    "text" // recursive if not set
+        },
+        "text" // recursive if not set
     );
     $.get('sessions.html', function(data) {
         var session = new ace.EditSession(data, {
@@ -47,7 +31,7 @@ ace.config.loadModule("ace/ext/searchbox", function(e) {
         });
         sessions['sessions.html'] = session;
         sessioncount++;
-        if (sessioncount == 3) createhyper(box);
+        if (sessioncount == 3) hyper.setSessions(sessions);
     });
     $.get('style.css', function(data) {
         var session = new ace.EditSession(data, {
@@ -55,9 +39,11 @@ ace.config.loadModule("ace/ext/searchbox", function(e) {
         });
         sessions['style.css'] = session;
         sessioncount++;
-        if (sessioncount == 3) createhyper(box);
+        if (sessioncount == 3) hyper.setSessions(sessions);
     });
-});
+
+}});
+
 
 // tab control
 $('.tabs li a').click(function() {

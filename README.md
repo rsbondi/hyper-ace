@@ -48,6 +48,9 @@ Initialize hyper-ace component
 // create hyperace
 var hyper = hyperace.create(editor, 'results', 'needle');
 ```
+'needle' is the textbox used for search.  If ommited, the ace default searchbox is used and [tab] triggers the search.
+When using the ace default, you can search multiple sessions by setting searchMultiSession to true or a single session by setting searchMultiSession to false.
+
 
 Add listeners
 ------------
@@ -117,6 +120,13 @@ Static function to create hypersearch instance
 * {string} *textbox*  the search pattern element
 * {string} *options*  additional configuration
 * return {hypersearch}
+ 
+options:
+
+* matchclass: the css fclass or highlightin matches in the result.  Default = 'hyperace=match'
+* lineclass: the css class for highlighting the selected line.  Default = 'hyperace-line'
+* load: callback function for default texbox loaded.
+
 
 hypersearch
 -----------

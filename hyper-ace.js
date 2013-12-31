@@ -13,7 +13,7 @@ var hyperace = function () {}
  */
 hyperace.create = function (editor, target, textbox, options) {
     return new hyperace.hypersearch(editor, target, textbox, options);
-}
+};
 
 /**
  * hypersearch constructor
@@ -29,8 +29,13 @@ hyperace.hypersearch = function(editor, target, textbox, options) {
     this.anchors = [] ;  // floating anchors that we jump to when a result is selected
     this.currentSession = 0 ; // the current edit session identifier
     this.editor = editor;
+    this.searchMultiSession = false;
     this.target = document.getElementById(target);
-    this.textbox = document.getElementById(textbox);
+    if(textbox) {
+        this.textbox = document.getElementById(textbox);
+    } else {
+        this._acebox();
+    }
     this.options = options ? options : [];
     if (options) {
         this.options['matchclass'] = options['matchclass'] ? options['matchclass'] : 'hyperace-match';
@@ -51,7 +56,7 @@ hyperace.hypersearch.prototype = {
         this.sessions = sessions;
         for (s in this.sessions) {
             this.currentSession = s;
-            console.log('initial session set to: ' + s)
+            console.log('initial session set to: ' + s);
             break;
         }
     },
@@ -79,9 +84,8 @@ hyperace.hypersearch.prototype = {
             session.innerHTML = s;
             session.className = 'hyperace-session';
             this.target.appendChild(session);
-            var rangecheck = editor.getSelection().getAllRanges();
             this._search(this.sessions[s], s);
-            console.log('session: ' + s + ': ' + this.ranges[s].length + ' matches.')
+            console.log('session: ' + s + ': ' + this.ranges[s].length + ' matches.');
             if (this.ranges[s].length == 0) {
                 this.target.removeChild(session)
             }
@@ -119,7 +123,7 @@ hyperace.hypersearch.prototype = {
         if (session) editor.setSession(session);
         var found = editor.findAll(this.textbox.value);
         if(found==0) editor.clearSelection();
-        console.log('found '+found+' matches in '+s)
+        console.log('found '+found+' matches in '+s);
         this.ranges[s] = editor.getSelection().getAllRanges();
         console.log(JSON.stringify(this.ranges[s]));
         editor.exitMultiSelectMode();
@@ -192,6 +196,38 @@ hyperace.hypersearch.prototype = {
             if (this.options['lineclass'] == links[l].className)links[l].className = '';
         }
         link.className = this.options['lineclass'];
+    },
+
+    /**
+     * creates ace default searchbox as the hypersearch box with optional callback
+     * @private
+     */
+    _acebox: function () {
+        var self = this;
+        // undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
+        ace.config.loadModule("ace/ext/searchbox", function(e) {
+            e.Search(self.editor); // set to editor component
+            self.textbox = self.editor.container.getElementsByClassName('ace_search_field')[0]; // get texbox element
+            self.textbox.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
+            self.textbox.addEventListener('keyup', function (e) { // look for tab key in search box
+                if (e.keyCode == 9) {
+                    if (self.searchMultiSession) {
+                        self.searchSessions();
+                    } else {
+                        self.search();
+                    }
+                }
+            });
+            self.editor.container.getElementsByClassName('ace_search')[0].style.display = 'none';
+
+            if(self.options) {
+                if (typeof self.options.load == 'function') {
+                    self.options.load(e);
+                }
+            }
+
+        });
+
     },
 
     /**

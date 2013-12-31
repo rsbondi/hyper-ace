@@ -38,23 +38,7 @@ document.getElementById("acemode").addEventListener('change', function () {
 var editor2 = ace.edit("editor2");
 editor2.setTheme("ace/theme/eclipse");
 editor2.getSession().setMode("ace/mode/javascript");
-var hyper2;
-
-
-// undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
-ace.config.loadModule("ace/ext/searchbox", function (e) {
-    e.Search(editor2); // set to editor component
-    var box = document.getElementById('editor2').getElementsByClassName('ace_search_field')[0]; // get texbox element
-    box.id = 'hyperbox'; // hyperace needs id, so we set it for the search box
-    box.addEventListener('keyup', function (e) { // look for tab key in search box
-        if (e.keyCode == 9)
-            hyper2.search();
-    });
-
-    hyper2 = hyperace.create(editor2, 'results2', 'hyperbox'); // add hyper-ace editor, target and search box id created above
-
-});
-
+var hyper2 = hyperace.create(editor2, 'results2');
 
 document.getElementById("acemode2").addEventListener('change', function () {
     editor2.getSession().setMode({"path": "ace/mode/" + this.value});
@@ -72,29 +56,14 @@ editor3.on("changeSession", function(e) {
     setTab(hyper3.currentSession);
 });
 var sessions = [];
-var hyper3;
-function createhyper(box) {
-    hyper3 = hyperace.create(editor3, 'results3', 'hyperbox3'); // add hyper-ace editor, target and search box id created above
-    hyper3.setSessions(sessions);
-    box.addEventListener('keyup', function (e) { // look for tab key in search box
-        if (e.keyCode == 9) {
-            if(document.getElementById('hyperall').checked) {
-                hyper3.searchSessions();
-            } else {
-                hyper3.search();
-            }
-        }
-    });
-}
+var hyper3 = hyperace.create(editor3, 'results3', null, {'load': function () {
+    hyper3.searchMultiSession = true;
 
-// undocumented ace function, used so we can initialize on callback of searchbox load to pass to hyper-ace
-ace.config.loadModule("ace/ext/searchbox", function(e) {
-    e.Search(editor3); // set to editor component
-    var box3 = document.getElementById('editor3').getElementsByClassName('ace_search_field')[0]; // get texbox element
-    box3.id = 'hyperbox3'; // hyperace needs id, so we set it for the search box
-    box3.value = "result" // example that works in all 3 modes
     $('#editor3 .ace_search').append($('#appendopt').html());
     document.body.removeChild($('#appendopt')[0]);
+    $('[name=hyperwho]').change(function () {
+        hyper3.searchMultiSession = this.id == 'hyperall' ;
+    });
 
     var sessioncount = 0; // track for all 3 sessions loaded
     // load content from project files
@@ -102,7 +71,7 @@ ace.config.loadModule("ace/ext/searchbox", function(e) {
             sessions['instances.js'] = editor3.getSession();
             editor3.getSession().setValue(data);
             sessioncount++;
-            if (sessioncount == 3) createhyper(box3);
+            if (sessioncount == 3) hyper3.setSessions(sessions);
 
         },
         "text" // recursive if not set
@@ -113,7 +82,7 @@ ace.config.loadModule("ace/ext/searchbox", function(e) {
         });
         sessions['instances.html'] = session;
         sessioncount++;
-        if (sessioncount == 3) createhyper(box3);
+        if (sessioncount == 3) hyper3.setSessions(sessions);
     });
     $.get('style.css', function(data) {
         var session = new ace.EditSession(data, {
@@ -121,9 +90,9 @@ ace.config.loadModule("ace/ext/searchbox", function(e) {
         });
         sessions['style.css'] = session;
         sessioncount++;
-        if (sessioncount == 3) createhyper(box3);
+        if (sessioncount == 3) hyper3.setSessions(sessions);
     });
-});
+}});
 
 // tab control
 $('.tabs li a').click(function() {
