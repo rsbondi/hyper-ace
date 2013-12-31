@@ -123,7 +123,7 @@ Static function to create hypersearch instance
  
 options:
 
-* matchclass: the css fclass or highlightin matches in the result.  Default = 'hyperace=match'
+* matchclass: the css fclass or highlightin matches in the result.  Default = 'hyperace-match'
 * lineclass: the css class for highlighting the selected line.  Default = 'hyperace-line'
 * load: callback function for default texbox loaded.
 

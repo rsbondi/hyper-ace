@@ -9,10 +9,11 @@ var sessions = [];
 var hyper = hyperace.create(editor, 'results', null, {'load': function () {
     hyper.searchMultiSession = true;
     $('.ace_search').append($('#appendopt').html());
-    document.body.removeChild($('#appendopt')[0]);
+    document.getElementById('appendopt').parentNode.removeChild(document.getElementById('appendopt'));
     $('[name=hyperwho]').change(function () {
         hyper.searchMultiSession = this.id == 'hyperall' ;
     });
+    editor.focus();
 
     var sessioncount = 0; // track for all 3 sessions loaded
     // load content from project files

@@ -64,6 +64,7 @@ var hyper3 = hyperace.create(editor3, 'results3', null, {'load': function () {
     $('[name=hyperwho]').change(function () {
         hyper3.searchMultiSession = this.id == 'hyperall' ;
     });
+    editor3.focus();
 
     var sessioncount = 0; // track for all 3 sessions loaded
     // load content from project files
