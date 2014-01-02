@@ -55,7 +55,7 @@ hyperace.hypersearch.prototype = {
      * @param {Array<EditSession>} sessions array of ace.EditSession objects with the key as named identifier
      */
     setSessions: function (sessions) {
-        // TODO: remove original change event at this.sessions[0]
+        var hold = this.sessions;
         this.sessions = sessions;
         for (s in this.sessions) {
             this.currentSession = s;
@@ -63,7 +63,16 @@ hyperace.hypersearch.prototype = {
         }
 
         for (s in this.sessions) {
-            this._anchorValidation(s);
+            var sessionok = true;
+            for(h in hold) {
+                if(hold[h] == this.sessions[s]) {
+                    sessionok = false; // already exists, do not want to add event handler
+                    break;
+                }
+            }
+            if(sessionok) {
+                this._anchorValidation(s);
+            }
         }
     },
 
