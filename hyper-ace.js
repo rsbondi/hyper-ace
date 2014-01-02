@@ -45,6 +45,8 @@ hyperace.hypersearch = function(editor, target, textbox, options) {
         this.options['lineclass'] = 'hyperace-line';
     }
     this.sessions = Array(editor.getSession());                  // set for single session, over-ridden for multi
+    this._anchorValidation(0);
+
 };
 
 hyperace.hypersearch.prototype = {
@@ -53,12 +55,25 @@ hyperace.hypersearch.prototype = {
      * @param {Array<EditSession>} sessions array of ace.EditSession objects with the key as named identifier
      */
     setSessions: function (sessions) {
+        // TODO: remove original change event at this.sessions[0]
         this.sessions = sessions;
         for (s in this.sessions) {
             this.currentSession = s;
-            console.log('initial session set to: ' + s);
-            break;
+            break; // just setting to first one
         }
+
+        for (s in this.sessions) {
+            this._anchorValidation(s);
+        }
+    },
+
+    /**
+     * update the session for hyper-ace and ace
+     * @param {string} identifier the identifer for the session to set
+     */
+    setSession: function (identifier) {
+        this.editor.setSession(this.sessions[identifier]);
+        this.currentSession = identifier;
     },
 
     /**
@@ -67,6 +82,15 @@ hyperace.hypersearch.prototype = {
      */
     set: function (options) {
         this.editor.$search.set(options);
+    },
+
+    /**
+     * clears search results
+     */
+    clear: function () {
+        this.target.innerHTML = '';
+        this.ranges = [];
+        this.anchors = [];
     },
 
     /**
@@ -85,7 +109,6 @@ hyperace.hypersearch.prototype = {
             session.className = 'hyperace-session';
             this.target.appendChild(session);
             this._search(this.sessions[s], s);
-            console.log('session: ' + s + ': ' + this.ranges[s].length + ' matches.');
             if (this.ranges[s].length == 0) {
                 this.target.removeChild(session)
             }
@@ -108,7 +131,6 @@ hyperace.hypersearch.prototype = {
             this.target.appendChild(header);
         }
         this._search(this.editor.getSession(), this.currentSession);
-        console.log('searching single session: ' + this.currentSession);
     },
 
     /**
@@ -118,14 +140,11 @@ hyperace.hypersearch.prototype = {
      * @private
      */
     _search: function (session, s) {
-        console.log('hypersearch activated for expression: ' + this.textbox.value);
         var editor = this.editor;
         if (session) editor.setSession(session);
         var found = editor.findAll(this.textbox.value);
         if(found==0) editor.clearSelection();
-        console.log('found '+found+' matches in '+s);
         this.ranges[s] = editor.getSelection().getAllRanges();
-        console.log(JSON.stringify(this.ranges[s]));
         editor.exitMultiSelectMode();
         for (r = 0; r < this.ranges[s].length; r++) {
             this.anchors[s].push(editor.getSession().getDocument().createAnchor(this.ranges[s][r].start.row, this.ranges[s][r].start.column));
@@ -146,7 +165,6 @@ hyperace.hypersearch.prototype = {
         }
         var line = this.ranges[sessionName][index].start.row;
         var col = this.ranges[sessionName][index].start.column;
-        console.log('found row index ' + index + ' @ line: ' + line);
         var container = document.createElement('div');
         var link = document.createElement('a');
         container.appendChild(link);
@@ -157,8 +175,7 @@ hyperace.hypersearch.prototype = {
         var pre = rawline.substr(0, this.ranges[sessionName][index].start.column);
         var match = rawline.substr(this.ranges[sessionName][index].start.column, this.ranges[sessionName][index].end.column - this.ranges[sessionName][index].start.column);
         var post = rawline.substr(this.ranges[sessionName][index].end.column);
-        console.log('line: ' + rawline + '\npre: ' + pre + '\nmatch: ' + match + '\npost: ' + post);
-        var resultline = this.htmlEncode(pre) + '<span class="' + this.options.matchclass + '">' + this.htmlEncode(match) + '</span>' + this.htmlEncode(post);
+        var resultline = this._htmlEncode(pre) + '<span class="' + this.options.matchclass + '">' + this._htmlEncode(match) + '</span>' + this._htmlEncode(post);
         link.innerHTML += '(' + (line + 1) + ',' + (col + 1) + ') ' + resultline + '<br/>';
         var self = this;
         link.addEventListener('click', function () {
@@ -168,27 +185,24 @@ hyperace.hypersearch.prototype = {
         this.target.appendChild(container);
     },
 
-    clear: function () {
-        this.target.innerHTML = '';
-    },
-
     /**
      * this is called from the link's event listener whenever a search result link is clicked
      * @param {Number} index index to the result anchor
      * @param {Element} link the result element that was clicked
      */
     _linkSelected: function (index, link) {
-        console.log("link selected for session: " + link.getAttribute('data-session') + ' at index: ' + index);
         var editor = this.editor;
         var pos = this.anchors[link.getAttribute('data-session')][index].getPosition();
         var aceRange = ace.require('ace/range').Range;
+        var linkSession = link.getAttribute('data-session');
 
-        this.currentSession = link.getAttribute('data-session');
-        console.log('session changeing to: ' + this.currentSession);
-        this.setSession(this.currentSession);
+        if(linkSession != this.currentSession) {
+            this.currentSession = linkSession;
+            this.setSession(this.currentSession);
+        }
         editor.focus();
         editor.moveCursorTo(pos.row, pos.column);
-        var range = this.ranges[link.getAttribute('data-session')][index];
+        var range = this.ranges[linkSession][index];
         editor.selection.setRange(new aceRange(pos.row, pos.column, pos.row, range.end.column + pos.column - range.start.column));
 
         var links = this.target.getElementsByTagName('div'); // clear result line highlight and set for selected result
@@ -231,17 +245,57 @@ hyperace.hypersearch.prototype = {
     },
 
     /**
-     * update the session for hyper-ace and ace
-     * @param {string} identifier the identifer for the session to set
+     * adds listener to check for when an anchor goes invalid
+     * @param {string} s the session identifier
+     * @private
      */
-    setSession: function (identifier) {
-        this.editor.setSession(this.sessions[identifier]);
-        this.currentSession = identifier;
-        console.log('session changed to: ' + identifier);
+    _anchorValidation: function (s) {
+        var self = this;
+        this.sessions[s].on('change', function (e) {
+            var delta = e.data;
+            if (delta.action === "removeText" || delta.action === "removeLines") {
+                var range = delta.range;
+
+                for(a in self.anchors[self.currentSession]) {
+                    var anchor = self.anchors[self.currentSession][a];
+                    if (
+                        (delta.action === "removeText" && range.end.column > anchor.column &&
+                            range.start.row === anchor.row && range.start.column <= anchor.column)
+                            ||
+                            (delta.action === "removeLines" && range.start.row <= anchor.row &&
+                                range.end.row > anchor.row)
+                        ) {
+                        self.anchors[self.currentSession][a].detach();
+                        var r = self._getResult(self.currentSession, a);
+                        if(r) {
+                            r.parentNode.removeChild(r);
+                        }
+                    }
+                }
+            }
+        });
+
+    },
+
+    /**
+     * returns a result element from the search results
+     * @param {string} session
+     * @param {int} index
+     * @returns {Element}
+     * @private
+     */
+    _getResult: function(session, index) {
+        var stags = this.target.getElementsByTagName('div');
+        for(s=0;s<stags.length;s++) {
+            if(stags[s].getAttribute('data-session') != session) continue;
+            var a = stags[s].getElementsByTagName('a')[0];
+            if(a.getAttribute('data-index')==index)
+                return stags[s];
+        }
     },
 
     // TODO: a better way?
-    htmlEncode: function (html) {
+    _htmlEncode: function (html) {
         return html
             .replace(/&/g, "&amp;").replace(/ /g, "&nbsp;")
             .replace(/\t/g, "&nbsp;&nbsp;&nbsp;&nbsp;")
