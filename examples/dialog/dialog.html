@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <link rel="stylesheet" href="style.css"/>
+    <meta charset="utf-8">
+</head>
+
+<body>
+
+<div id="editor"></div>
+<div id="hyper">
+    <input type="text" id="exp"/>
+    <button id="search">Search</button>
+    <label for="regex">regular expression</label><input id="regex" type="checkbox"/>&nbsp;
+    <label for="case">match case</label><input id="case" type="checkbox"/>&nbsp;
+    <label for="whole">whole word</label><input id="whole" type="checkbox"/>
+
+</div>
+<div id="results" title="Search Results">
+</div>
+
+
+<script src="http://ace.c9.io/build/src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../hyper-ace.js"></script>
+<script>
+    // create ace editor
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/eclipse");
+    editor.getSession().setMode("ace/mode/javascript");
+
+    // create hyperace and listeners
+    var hyper = hyperace.create(editor, 'results', 'exp');
+
+    $('#search').click(function () {
+        hyper.search();
+        $( "#results" ).dialog( "open" );
+    });
+
+    $('#exp').keyup(function (e) {
+        if (e.which  == 13) {
+            hyper.search();
+            $( "#results" ).dialog( "open" );
+        }
+
+    });
+
+    $("#regex").click(function () {
+        hyper.set({"regExp": this.checked});
+    });
+
+    $("#case").click(function () {
+        hyper.set({"caseSensitive": this.checked});
+    });
+
+    $("#whole").click(function () {
+        hyper.set({"wholeWord": this.checked});
+    });
+
+    $(function() {
+        $( "#results" ).dialog({autoOpen: false, width: 800, height: 500});
+        $.get('../../hyper-ace.js', function(data) {
+                    editor.getSession().setValue(data);
+                    editor.getSession().setMode({"path": "ace/mode/javascript"});
+                },
+                "text" // don't run script
+        );
+    });
+
+</script>
+</body>
+
+</html>
+
+
+
+
