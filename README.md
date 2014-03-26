@@ -9,6 +9,7 @@ Here are the examples from the examples directory
 * [acebox](http://richardbondi.net/hyper-ace/examples/acebox/acebox.html): Uses the built in ace search form.
 * [sessions](http://richardbondi.net/hyper-ace/examples/sessions/sessions.html): Advanced example using the built in ace search form, extending the form for hypersearch and searching accross multiple sessions.
 * [instances](http://richardbondi.net/hyper-ace/examples/instances/instances.html): The 3 above examples combined on one page to show multiple instances.
+* [dialog](http://richardbondi.net/hyper-ace/examples/dialog/dialog.html): Show search results in a dialog.
 
 Usage
 =====
